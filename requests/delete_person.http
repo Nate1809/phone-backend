@@ -1,0 +1,4 @@
+### DELETE request to server
+DELETE https://phone-backend-jysx.onrender.com/api/persons/1
+
+###
