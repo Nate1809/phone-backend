@@ -1,0 +1,4 @@
+### GET request to get a single person
+GET https://phone-backend-jysx.onrender.com/info
+
+###

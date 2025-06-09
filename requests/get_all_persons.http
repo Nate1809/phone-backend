@@ -1,0 +1,4 @@
+### GET request to get all persons
+GET https://phone-backend-jysx.onrender.com/api/persons
+
+###
