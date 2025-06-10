@@ -1,10 +1,11 @@
 ### POST request to server, create new person
-POST https://phone-backend-jysx.onrender.com/api/persons
+#POST https://phone-backend-jysx.onrender.com/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Alameda Smith",
-  "number": "01-800-ALAMEDA"
+    "name": "RATA MORALES",
+    "number": "28374782634"
 }
 
 ###

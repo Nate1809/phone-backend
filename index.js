@@ -1,4 +1,5 @@
 require('dotenv').config()
+const Person = require('./models/person')
 const express = require('express')
 const morgan = require('morgan')
 
@@ -16,15 +17,6 @@ morgan.token('body', (req) => {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-// const requestLogger = (request, response, next) => {
-//     console.log('Method:', request.method)
-//     console.log('Path:  ', request.path)
-//     console.log('Body:  ', request.body)
-//     console.log('---')
-//     next()
-// }
-// app.use(requestLogger)
 
 // hardcoded data
 let persons = [
@@ -54,28 +46,36 @@ let persons = [
 
 // GET all persons
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person
+        .find({})
+        .then(persons => {
+            console.log("Got persons from database:", persons)
+            response.json(persons)
+        })
 })
 
 // GET a single person
 app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    Person
+        .findById(request.params.id)
+        .then(person => {
+            console.log("Got person from database:", person)
+            response.json(person)
+        })
 })
 
 // GET info about the phonebook
 app.get('/info', (request, response) => {
-    const numEntries = persons.length
-    response.send(
-        `<p>Phonebook has info for ${numEntries} people</p> 
-                <p>${new Date()}</p>`
-    )
+    Person.collection
+        .countDocuments()
+        .then(numEntries => {
+                console.log(`Phonebook has info for ${numEntries} people`)
+                response.send(
+                    `<p>Phonebook has info for ${numEntries} people</p>
+                        <p>${new Date()}</p>`
+                )
+            }
+        )
 })
 
 // DELETE a person
@@ -106,21 +106,24 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    // Check if the name already exists
-    if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
+    // // Check if the name already exists
+    // if (persons.find(person => person.name === body.name)) {
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    // }
 
-    const person = {
-        id: generateID(),
+    const person = new Person({
         name: body.name,
-        number: body.number
-    }
+        number: body.number,
+    })
 
-    persons.push(person) // ✅ actually modifies the array
-    response.json(person)
+    person
+        .save()
+        .then(savedPerson => {
+            console.log('Person saved to database')
+            response.json(savedPerson)
+        })
 })
 
 // Error handling middleware
