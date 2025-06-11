@@ -144,7 +144,6 @@ const errorHandler = (error, request, response, next) => {
 // this has to be the last loaded middleware, also all the routes should be registered before this!
 app.use(errorHandler)
 
-
 // Finally, we need to start our server
 const PORT = process.env.PORT
 app.listen(PORT, () => {
