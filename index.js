@@ -79,11 +79,16 @@ app.get('/info', (request, response) => {
 })
 
 // DELETE a person
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-    console.log("Deleted person with id: " + id)
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+    // const id = request.params.id
+    // persons = persons.filter(person => person.id !== id)
+    // console.log("Deleted person with id: " + id)
+    // response.status(204).end()
+    Person.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 const generateID = () => {
