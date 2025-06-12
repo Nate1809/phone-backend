@@ -10,6 +10,7 @@
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "build:ui": "rm -rf dist && cd /Users/monone/Documents/Full\\ Stack\\ Open/Full-Stack-Open-submissions/part2/phonebook && npm run build && cp -r dist /Users/monone/Documents/Full\\ Stack\\ Open/Full-Stack-Open-submissions/part3/phone-backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
