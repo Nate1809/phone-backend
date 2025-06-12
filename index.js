@@ -73,16 +73,16 @@ const generateID = () => {
 }
 
 //POST a new person
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     console.log('POST request received')
     const body = request.body
 
     // Check if the name and number are in the request body
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'name and number are required'
-        })
-    }
+    // if (!body.name || !body.number) {
+    //     return response.status(400).json({
+    //         error: 'name and number are required'
+    //     })
+    // }
 
     // // Check if the name already exists
     // if (persons.find(person => person.name === body.name)) {
@@ -102,6 +102,7 @@ app.post('/api/persons', (request, response) => {
             console.log('Person saved to database')
             response.json(savedPerson)
         })
+        .catch(error => next(error))
 })
 
 //Update single person
@@ -136,6 +137,8 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError'){
+        return response.status(400).json({ error: error.message })
     }
 
     next(error)
